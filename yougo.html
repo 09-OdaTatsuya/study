@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>
+/* standalone reset */
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Salesforce試験 用語の由来</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap">
+<style>
+/* Layout: single reading column, sticky section bar, per-section read marks. Handbook feel: serif headings, sans body. */
+:root{
+  --bg:#F7F8FA; --fg:#14181F; --muted:#5A6472; --rule:#DEE3EA; --card:#FFFFFF;
+  --accent:#225098; --accent-soft:#DCEFFB; --accent-ink:#1A3F78;
+  --warn:#8E4410; --warn-soft:#FBEEE3; --warn-rule:#E9CFB6;
+  --code-bg:#EDF0F4; --code-fg:#1B2733;
+  --serif:"Noto Serif JP",'Hiragino Mincho ProN',serif;
+  --sans:"Noto Sans JP",'Hiragino Sans','Helvetica Neue',Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11151B; --fg:#E6EAF0; --muted:#95A1B1; --rule:#273141; --card:#171D25;
+  --accent:#74B8EF; --accent-soft:#16293C; --accent-ink:#A7D3F6;
+  --warn:#E8A972; --warn-soft:#2C1F14; --warn-rule:#4A382A;
+  --code-bg:#1B222C; --code-fg:#D6DEE8;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#11151B; --fg:#E6EAF0; --muted:#95A1B1; --rule:#273141; --card:#171D25;
+  --accent:#74B8EF; --accent-soft:#16293C; --accent-ink:#A7D3F6;
+  --warn:#E8A972; --warn-soft:#2C1F14; --warn-rule:#4A382A;
+  --code-bg:#1B222C; --code-fg:#D6DEE8;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.85;
+  -webkit-text-size-adjust:100%;margin:0;letter-spacing:.01em}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+
+/* ---- bars ---- */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);
+  border-bottom:1px solid var(--rule)}
+#bar .in{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:9px;max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;min-width:0}
+#now{font-family:var(--serif);font-size:14px;font-weight:600;flex:1;min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.bbtn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--fg);
+  font-family:var(--sans);font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;cursor:pointer;
+  flex:none;line-height:1.5}
+.bbtn:hover{border-color:var(--accent)}
+.bbtn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+#prog{height:2px;background:var(--accent);width:0}
+
+/* ---- page ---- */
+main,header.top{max-width:720px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:34px 18px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(25px,7vw,34px);line-height:1.35;margin:0 0 12px;
+  text-wrap:balance;letter-spacing:.01em}
+.sub{color:var(--muted);font-size:14px;line-height:1.8;margin:0}
+.sub b{color:var(--fg);font-weight:700}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--accent);margin:0 0 10px}
+
+/* ---- toc ---- */
+#toc{border:1px solid var(--rule);border-radius:12px;background:var(--card);margin:22px 0 8px;overflow:hidden}
+#toc>summary{list-style:none;cursor:pointer;padding:13px 16px;font-size:13px;font-weight:700;
+  display:flex;justify-content:space-between;gap:8px}
+#toc>summary::-webkit-details-marker{display:none}
+#toc>summary::after{content:"＋";color:var(--muted);font-weight:400}
+#toc[open]>summary::after{content:"−"}
+#toc ol{list-style:none;margin:0;padding:0 8px 8px;counter-reset:t}
+#toc li{counter-increment:t}
+#toc a{display:flex;gap:10px;align-items:baseline;padding:9px 8px;border-radius:8px;
+  text-decoration:none;color:var(--fg);font-size:14px;line-height:1.5}
+#toc a:hover{background:var(--accent-soft)}
+#toc a::before{content:"§" counter(t,decimal);font-family:var(--mono);font-size:11px;color:var(--muted);
+  flex:none;min-width:2.3em}
+#toc a.done{color:var(--muted)}
+#toc a.done::after{content:"✓";color:var(--accent);font-size:12px;margin-left:auto;flex:none}
+
+/* ---- search ---- */
+.find{margin:14px 0 4px;position:relative}
+.find input{width:100%;font-family:var(--sans);font-size:15px;color:var(--fg);background:var(--card);
+  border:1px solid var(--rule);border-radius:10px;padding:11px 14px;line-height:1.5}
+.find input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+#hits{font-size:12px;color:var(--muted);margin:8px 2px 0;min-height:1.3em}
+
+/* ---- sections ---- */
+section{padding-block:30px 8px;border-top:1px solid var(--rule);margin-top:26px;scroll-margin-top:72px}
+section:first-of-type{border-top:0}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(19px,5.2vw,23px);line-height:1.45;margin:0 0 4px;
+  text-wrap:balance}
+h2 .n{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--accent);display:block;
+  letter-spacing:.1em;margin-bottom:7px}
+.lede{color:var(--muted);font-size:14px;margin:4px 0 20px;line-height:1.8}
+h3{font-family:var(--sans);font-size:15px;font-weight:700;margin:26px 0 10px;color:var(--accent-ink)}
+p{margin:0 0 15px}
+strong{font-weight:700}
+em{font-style:normal;background:var(--accent-soft);padding:1px 4px;border-radius:3px;font-weight:500}
+
+/* ---- term entries ---- */
+.term{margin:0 0 18px;padding-left:13px;border-left:2px solid var(--rule)}
+.term.key{border-left-color:var(--accent)}
+.term>.t{font-weight:700;display:block;margin-bottom:3px}
+.term>.t .en{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--muted);
+  margin-left:7px;letter-spacing:0}
+.term p:last-child{margin-bottom:0}
+.term ul{margin:9px 0 0;padding-left:1.15em}
+.term li{margin-bottom:7px}
+
+ul.plain{margin:0 0 15px;padding-left:1.15em}
+ul.plain li{margin-bottom:9px}
+
+/* ---- callouts ---- */
+.pat{background:var(--accent-soft);border-radius:10px;padding:13px 15px;margin:0 0 16px;font-size:14.5px;
+  line-height:1.8}
+.pat .lab{display:block;font-size:11px;font-weight:700;letter-spacing:.11em;color:var(--accent-ink);
+  margin-bottom:5px}
+.pat p:last-child{margin-bottom:0}
+.warn{background:var(--warn-soft);border:1px solid var(--warn-rule);border-radius:10px;padding:13px 15px;
+  margin:0 0 16px;font-size:14.5px;line-height:1.8}
+.warn .lab{display:block;font-size:11px;font-weight:700;letter-spacing:.11em;color:var(--warn);margin-bottom:5px}
+.warn p:last-child{margin-bottom:0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-fg);
+  padding:2px 5px;border-radius:4px;word-break:break-word}
+.box{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:13px 15px;margin:0 0 16px;
+  font-family:var(--mono);font-size:12.5px;line-height:1.95;overflow-x:auto;white-space:pre}
+
+/* ---- tables ---- */
+.scroll{overflow-x:auto;margin:0 0 17px;border:1px solid var(--rule);border-radius:10px;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.65}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--muted);white-space:nowrap;
+  background:var(--card)}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
+td.old{color:var(--muted)}
+
+/* ---- read toggle ---- */
+.mark{display:flex;justify-content:flex-end;padding-block:14px 2px}
+.mark button{appearance:none;border:1px solid var(--rule);background:transparent;color:var(--muted);
+  font-family:var(--sans);font-size:12.5px;padding:7px 15px;border-radius:999px;cursor:pointer}
+.mark button:hover{border-color:var(--accent);color:var(--accent-ink)}
+.mark button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);
+  font-weight:700}
+
+footer{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:30px 44px;border-top:1px solid var(--rule);
+  margin-top:30px;color:var(--muted);font-size:13px;line-height:1.8}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+<div id="bar">
+  <div class="in">
+    <span id="now">はじめに</span>
+    <button class="bbtn" id="tocBtn" aria-pressed="false">目次</button>
+    <button class="bbtn" id="findBtn" aria-pressed="false">検索</button>
+  </div>
+  <div id="prog"></div>
+</div>
+
+<header class="top">
+  <p class="eyebrow">PD1 ／ PLATFORM DATA ARCHITECT</p>
+  <h1>用語の由来から覚える<br>Salesforce試験の要素</h1>
+  <p class="sub">過去問分析で挙げた要素の意味を、<b>なぜそれが存在するのか</b>から解説したもの。対応表だけを暗記すると問題文の言い回しが変わった瞬間に外すため、制約の出どころを先に置いている。<br>
+  <b>§0 を読んでから、あとは引きたいところだけ引く。</b>§0 を飛ばすと以降が全部暗記になる。</p>
+
+  <details id="toc">
+    <summary><span>目次</span></summary>
+    <ol id="tocList"></ol>
+  </details>
+
+  <div class="find" id="findWrap" hidden>
+    <input id="q" type="search" placeholder="用語で絞り込む（例：ロック、Bulk、スキュー）" autocomplete="off" spellcheck="false">
+    <p id="hits"></p>
+  </div>
+</header>
+
+<main>
+
+<section id="basics" data-t="大前提：相席">
+  <h2><span class="n">§ 0</span>大前提：制約はすべて「相席」から来る</h2>
+  <p class="lede">ここを押さえると、以降の制約を個別に暗記しなくても選択肢が自分で切れる。</p>
+  <p>Salesforceは<strong>1台のサーバーを多数の会社が同時に使う</strong>（マルチテナント）。自社専用のサーバーではなく、知らない会社と同じ建物の同じフロアに相席している状態。</p>
+  <p>ここから、試験に出るほぼ全ての制約が導かれる。</p>
+  <ul class="plain">
+    <li><strong>誰か1社の重い処理で全社が止まる</strong>ので、1回の処理で使える量に上限を置く（→ ガバナ制限）</li>
+    <li><strong>他社のデータが見えてはいけない</strong>ので、データの見え方を厳格に制御する（→ 共有モデル）</li>
+    <li><strong>他社の都合でサーバーを止められない</strong>ので、バージョンアップは全社一斉・強制（→ リリースサイクル）</li>
+  </ul>
+  <div class="pat"><span class="lab">判断の型</span>
+    <p>迷ったら<strong>「相席している建物で、これは迷惑か？」</strong>を考える。迷惑な選択肢はたいてい不正解。</p></div>
+</section>
+
+<section id="limits" data-t="ガバナ制限">
+  <h2><span class="n">§ 1</span>ガバナ制限</h2>
+  <div class="term key"><span class="t">ガバナ制限<span class="en">Governor Limits</span></span>
+    <p>1回の処理で使える資源の上限。超えると処理が強制中断されエラーになる。「ガバナ」は調速機（エンジンの回転を上げすぎないようにする部品）の意味。</p></div>
+
+  <p>覚える主な上限（1回の処理あたり）：</p>
+  <div class="scroll"><table>
+    <thead><tr><th>何の上限か</th><th>数</th></tr></thead>
+    <tbody>
+      <tr><td>データの保存・更新・削除の<strong>命令回数</strong>（DML）</td><td class="num">150</td></tr>
+      <tr><td>データの検索の<strong>命令回数</strong>（SOQL）</td><td class="num">100</td></tr>
+      <tr><td>検索で<strong>取得できる件数</strong>の合計</td><td class="num">50,000</td></tr>
+      <tr><td>保存・更新できる<strong>件数</strong>の合計</td><td class="num">10,000</td></tr>
+      <tr><td>非同期処理（future）の呼び出し回数</td><td class="num">50</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="pat"><span class="lab">ここが核心</span>
+    <p><strong>「回数」と「件数」は別の上限。</strong>1回の命令で1万件を保存するのはOKだが、1件ずつ1万回保存するのはアウト（150回で止まる）。この区別が試験の核心。</p></div>
+
+  <div class="term"><span class="t">DML<span class="en">Data Manipulation Language</span></span>
+    <p>データを<strong>書き換える</strong>命令のこと。insert（追加）／update（更新）／delete（削除）／upsert（あれば更新・なければ追加）。</p></div>
+  <div class="term"><span class="t">SOQL（ソークル）<span class="en">Salesforce Object Query Language</span></span>
+    <p>データを<strong>読む</strong>命令のこと。SQLのSalesforce版。</p></div>
+  <div class="term"><span class="t">SOSL（ソッスル）<span class="en">Salesforce Object Search Language</span></span>
+    <p>複数の種類のデータを<strong>横断して全文検索</strong>する命令。SOQLが「取引先テーブルから条件で絞る」なら、SOSLは「全部から『田中』を含むものを探す」。使い分けが問われる。</p></div>
+</section>
+
+<section id="bulk" data-t="バルク化">
+  <h2><span class="n">§ 2</span>バルク化</h2>
+  <p class="lede">PD1で最も出題される概念。これだけで複数問取れる。</p>
+  <div class="term key"><span class="t">バルク化<span class="en">Bulkification</span></span>
+    <p>「1件ずつ処理する」書き方をやめて「まとめて処理する」書き方にすること。必要な理由は §1 のとおり<strong>命令の回数</strong>に上限があるため。</p></div>
+
+  <div class="box">【悪い例】100件のループの中で、1件ずつ保存命令を出す
+      → 保存命令 100回
+
+【良い例】100件を箱に溜めて、ループを抜けてから
+      1回だけ保存命令を出す
+      → 保存命令 1回</div>
+
+  <div class="pat"><span class="lab">合格の型</span>
+    <p><strong>ループの中にデータの読み書き命令を書かない。ループの外で1回だけ呼ぶ。</strong></p>
+    <p><strong>選択肢の見分け方</strong>：コードが出てくる問題で、<code>for</code>（繰り返し）の中括弧の内側に <code>insert</code> / <code>update</code> / <code>[SELECT ...]</code> が書かれていたら、その選択肢は不正解。</p></div>
+</section>
+
+<section id="triggers" data-t="トリガーとテスト">
+  <h2><span class="n">§ 3</span>トリガーとテスト</h2>
+
+  <h3>トリガー</h3>
+  <div class="term"><span class="t">トリガー<span class="en">Apex Trigger</span></span>
+    <p>「レコードが保存されたら自動で動く処理」。引き金の意味。</p></div>
+  <div class="term key"><span class="t">before トリガー</span>
+    <p>データが<strong>保存される直前</strong>に動く。<strong>この時点では値を書き換えてよい</strong>（まだ保存されていないので、書き換えてから保存される＝追加の保存命令が不要）。入力値の補正・検証はここ。</p></div>
+  <div class="term key"><span class="t">after トリガー</span>
+    <p>データが<strong>保存された直後</strong>に動く。<strong>関連する別のレコードを触る</strong>のはここ（自分自身を触ると再保存が必要になり非効率）。保存で初めて確定する情報（採番されたIDなど）を使えるのもこちら。</p></div>
+
+  <div class="pat"><span class="lab">試験での型</span>
+    <p>自分のレコードの値を直す＝<strong>before</strong>　／　他のレコードを作る・更新する＝<strong>after</strong></p></div>
+
+  <div class="term"><span class="t">Trigger.new ／ Trigger.old</span>
+    <p>トリガーの中で使える「処理対象のレコードの一覧」。<code>new</code>＝新しい値、<code>old</code>＝変更前の値。「金額が変わったときだけ動かす」のように<strong>変化を検知する</strong>には両方を比べる。</p></div>
+  <div class="term"><span class="t">addError()</span>
+    <p>トリガーの中からエラーを出して保存を中止させる命令。<strong>入力規則（§4）では表現できない複雑な条件</strong>で保存を止めたいときに使う。</p></div>
+  <div class="term"><span class="t">再帰<span class="en">recursion</span></span>
+    <p>トリガーが自分の処理の中でまたレコードを更新し、それが再びトリガーを呼ぶ無限ループ。対策は「一度動いたら印を付けておき、2回目は何もしない」（static変数を使う）。</p></div>
+
+  <h3>テスト</h3>
+  <div class="term key"><span class="t">Apexテスト</span>
+    <p>コードが正しく動くことを確認する「検査用のコード」。Salesforceでは<strong>本番環境へコードを入れる際にテストの合格が必須</strong>で、ここが他の開発環境と大きく違う。</p></div>
+  <div class="term"><span class="t">コードカバー率 75%</span>
+    <p>本番へ入れるには、組織全体のApexコードの<strong>75%以上がテストで通過していること</strong>が必要。さらに<strong>全てのトリガーが最低1行はテストで通ること</strong>。</p></div>
+  <div class="term"><span class="t">テストはデータを見ない</span>
+    <p>テストコードは原則、組織の実データを参照できない（<code>@isTest(SeeAllData=true)</code> を付けない限り）。<strong>テスト用のデータはテストの中で自分で作る。</strong>これが「テストデータを作る処理が必要」という選択肢の根拠。</p></div>
+  <div class="term"><span class="t">Test.startTest() ／ stopTest()</span>
+    <p>この2つで囲んだ範囲だけ、ガバナ制限のカウントが新品に戻る。「準備のための処理で制限を使い切ってしまう」のを避けるための仕組み。</p></div>
+  <div class="term key"><span class="t">HttpCalloutMock</span>
+    <p>テスト中は<strong>外部システムへ通信できない</strong>（相席している建物から勝手に外へ電話をかけられない）。そのため「外部がこう返事したことにする」偽の返答を用意する仕組み。<strong>外部連携のコードをテストする問題の答えはほぼこれ。</strong></p></div>
+  <div class="term"><span class="t">System.runAs()</span>
+    <p>「別のユーザーになったつもりで」テストを動かす命令。権限や共有の設定が正しいかを検査するときに使う。</p></div>
+</section>
+
+<section id="declarative" data-t="コードを書かない選択肢">
+  <h2><span class="n">§ 4</span>コードを書かない選択肢（宣言的機能）</h2>
+  <p class="lede">Salesforceの設計原則は「宣言的機能で済むならコードを書かない」。コードはテストと保守が必要になり、バージョンアップで壊れるリスクも負うため。</p>
+
+  <div class="pat"><span class="lab">試験での意味</span>
+    <p>「これを実現する最適な方法は？」と問われたら、<strong>コードを使わない選択肢が正解の可能性が高い。</strong>逆に「宣言的機能では不可能」と判断させるための条件（複雑な分岐、外部通信、大量件数の処理）が問題文に埋まっていることもある。</p></div>
+
+  <div class="term"><span class="t">数式項目<span class="en">Formula Field</span></span>
+    <p>他の項目から計算して<strong>表示するだけ</strong>の項目。データとして保存されない（＝常に最新だが、検索条件に使うと重い）。</p></div>
+  <div class="term"><span class="t">積み上げ集計項目<span class="en">Roll-Up Summary</span></span>
+    <p>子レコードの合計・件数・最大・最小を親に表示する項目。<strong>主従関係（master-detail）がある場合のみ使える。</strong></p></div>
+  <div class="term"><span class="t">入力規則<span class="en">Validation Rule</span></span>
+    <p>「この条件を満たさなければ保存させない」というルール。単純な条件はこれ、複雑なものは §3 の <code>addError()</code>。</p></div>
+  <div class="term key"><span class="t">レコードトリガーフロー<span class="en">Record-Triggered Flow</span></span>
+    <p>保存時に動く自動処理を、画面上の設定で組み立てる機能。<strong>かつてのワークフロールール／プロセスビルダーの後継</strong>で、現在はこれが標準。過去問に「ワークフロールール」「プロセスビルダー」が出てきたら古い（→ §13）。</p></div>
+  <div class="term"><span class="t">クイックアクション</span>
+    <p>画面上のボタンから特定の操作（レコード作成、項目更新）を呼び出す仕組み。</p></div>
+  <div class="term"><span class="t">カスタムメタデータ型／カスタム設定<span class="en">Custom Metadata Type / Settings</span></span>
+    <p>「設定値をコードの中に書かない」ための置き場所。しきい値や税率のような<strong>後で変わる数値をコードから追い出す</strong>のに使う。カスタムメタデータ型は<strong>デプロイで運べる</strong>点が重要（カスタム設定のデータは運べない）。</p></div>
+</section>
+
+<section id="ui" data-t="画面の作り方">
+  <h2><span class="n">§ 5</span>画面の作り方</h2>
+  <p class="lede">画面技術は3世代ある。新しい順に LWC → Aura → Visualforce。「どれを選ぶべきか」と「それぞれの作法」が出る。</p>
+
+  <div class="term key"><span class="t">LWC<span class="en">Lightning Web Components</span></span>
+    <p><strong>現行の標準。</strong>新規開発はこれを選ぶ。</p>
+    <ul>
+      <li><strong>@wire</strong> — サーバーからデータを取ってきて画面に自動で反映させる仕組み。データが変わると自動で再表示される。</li>
+      <li><strong>@AuraEnabled(cacheable=true)</strong> — サーバー側の処理に付ける印。「結果を使い回してよい（＝読むだけで何も書き換えない）」という宣言。<strong><code>@wire</code> で呼ぶ処理にはこれが必須。</strong>逆に、データを書き換える処理には付けられない。</li>
+      <li><strong>カスタムイベント</strong> — 部品どうしの連絡手段。<strong>子から親へは「イベントを投げる」、親から子へは「直接呼ぶ」</strong>という向きの違いが問われる。</li>
+    </ul></div>
+
+  <div class="term"><span class="t">Aura Components</span>
+    <p>一世代前。既存のものを保守する文脈で出る。イベントを投げる命令が <code>fire()</code>。</p></div>
+
+  <div class="term key"><span class="t">Visualforce</span>
+    <p>最も古い世代。ただし<strong>今でも現役の用途が2つある</strong>ので捨てられない。</p>
+    <ul>
+      <li><strong>PDF出力</strong> — <code>renderAs="pdf"</code> を付けると画面をPDFとして出力できる。<strong>帳票・請求書の出力を問う問題の答えはこれ</strong>（LWCには同等の標準機能がない）。</li>
+      <li><strong>apex:pageMessages</strong> — エラーメッセージを画面に表示する部品。</li>
+      <li><strong>StandardSetController</strong> — 一覧のページ送り（ページネーション）を担う部品。「大量の一覧を分割表示する」問題で出る。</li>
+    </ul></div>
+</section>
+
+<section id="devops" data-t="開発と配布">
+  <h2><span class="n">§ 6</span>開発と配布</h2>
+  <div class="term"><span class="t">組織<span class="en">Org</span></span>
+    <p>Salesforceの1契約単位。「本番組織」「サンドボックス」など。</p></div>
+  <div class="term key"><span class="t">サンドボックス<span class="en">Sandbox</span></span>
+    <p>本番のコピーで作る練習・検証用の組織。種類で<strong>データがどこまで入るか</strong>と<strong>作り直せる頻度</strong>が違う。</p>
+    <ul>
+      <li><strong>Developer / Developer Pro</strong>＝設定だけコピー（データは入らない、容量小）</li>
+      <li><strong>Partial Copy</strong>＝設定＋データの一部（抽出条件を指定）</li>
+      <li><strong>Full</strong>＝本番の完全なコピー。<strong>本番相当の性能検証・大量データの検証はこれしかない。</strong>作り直せるのは29日に1回。</li>
+    </ul></div>
+  <div class="term"><span class="t">Dev Hub ／ スクラッチ組織<span class="en">Scratch Org</span></span>
+    <p>「使い捨ての開発用組織」を必要なときに作って、終わったら捨てる仕組み。Dev Hub はその発行元。<strong>ソース駆動開発</strong>（設定をファイルとしてGitで管理する考え方）の中核。</p></div>
+  <div class="term"><span class="t">Salesforce CLI（sf コマンド）</span>
+    <p>コマンドで組織を操作・デプロイするための道具。</p></div>
+  <div class="term key"><span class="t">メタデータAPI／デプロイ</span>
+    <p>設定（オブジェクト、項目、画面、コード）を組織間で運ぶ仕組み。<strong>「その設定はデプロイで運べるか」という問いが両試験に出る。</strong></p>
+    <ul>
+      <li><strong>パスアシスタント</strong>（商談の進め方を画面に表示する機能）は運べる。</li>
+      <li><strong>リストビュー</strong>は運べるが<strong>ワイルドカード（まとめ指定）が効かない</strong>ため1つずつ列挙が必要で、さらに<strong>非公開のリストビューは運べない。</strong></li>
+    </ul></div>
+  <div class="term"><span class="t">変更セット<span class="en">Change Set</span></span>
+    <p>画面操作で設定を運ぶ、古いが今も使われる方法。<strong>削除を運べない</strong>などの制約がある。</p></div>
+</section>
+
+<section id="dataio" data-t="データの出し入れ（API群）">
+  <h2><span class="n">§ 7</span>データの出し入れ（API群）</h2>
+  <p class="lede">Data Architect の主戦場。「何件を、どれくらいの速さで、どういう形で入れるか」で道具が変わる。</p>
+
+  <h3>道具の選び方</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>状況</th><th>使うもの</th></tr></thead>
+    <tbody>
+      <tr><td>大量（数万件以上）をまとめて入れる・出す</td><td><strong>Bulk API</strong></td></tr>
+      <tr><td>少量をその都度・リアルタイムに</td><td><strong>REST API</strong>（軽量・現代的）／<strong>SOAP API</strong>（古いが機能が厚い）</td></tr>
+      <tr><td>「データが変わったら知らせてほしい」</td><td><strong>Streaming API</strong> ／ <strong>変更データキャプチャ</strong>（§9）</td></tr>
+      <tr><td>設定そのものを運ぶ</td><td><strong>メタデータAPI</strong>（§6）</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="term key"><span class="t">Bulk API</span>
+    <p><strong>大量データ専用の入り口。</strong>普通のAPIが「窓口に1人ずつ並ぶ」なら、Bulk APIは「トラックで荷物を持ち込んで、裏で順次処理してもらう」方式。データをまとめてアップロードし、Salesforce側が非同期（裏側で時間をかけて）処理し、終わったら結果を取りに行く。<strong>現行は Bulk API 2.0。</strong></p></div>
+  <div class="term"><span class="t">Data Loader</span>
+    <p>Bulk API を画面から使えるようにした無料ツール。実務ではこれを使う。</p></div>
+
+  <h3>直列モードと並列モード</h3>
+  <p>Bulk API は持ち込まれたデータを<strong>細かい束（バッチ）に分けて処理する</strong>。その束を<strong>同時に処理するか、順番に処理するか</strong>の選択。</p>
+  <div class="term key"><span class="t">並列モード<span class="en">parallel</span></span>
+    <p>複数の束を<strong>同時に</strong>処理する。<strong>速い。既定（デフォルト）はこちら。</strong></p></div>
+  <div class="term key"><span class="t">直列モード<span class="en">serial</span></span>
+    <p>束を<strong>1つずつ順番に</strong>処理する。<strong>遅いが、ロック競合が起きない。</strong></p></div>
+  <div class="box">速さ優先           → 並列（既定のまま）
+ロック競合でエラー → 直列に切り替える</div>
+
+  <h3>ロック競合</h3>
+  <div class="term"><span class="t">ロック</span>
+    <p>あるレコードを書き換えている間、他の処理がそれを触れないように一時的に鍵をかけること。鍵をかけないと、2つの処理が同時に書き換えて片方が消える。</p></div>
+  <div class="term key"><span class="t">ロック競合<span class="en">UNABLE_TO_LOCK_ROW</span></span>
+    <p>その鍵を取り合って、待たされた側が失敗すること。エラーの文面は <code>UNABLE_TO_LOCK_ROW</code>。過去問にこの文字列が出たら、ほぼこの話。</p>
+    <p><strong>なぜ大量ロードで起きるか</strong>：子レコードを保存すると、<strong>Salesforceは親レコードにも鍵をかける</strong>（親の集計値などを整合させる必要があるため）。</p></div>
+
+  <div class="box">取引先A ← 商談1、商談2、商談3 …（同じ親を持つ子）
+
+並列モードで商談1と商談2が同時に処理されると、
+両方が「取引先A」に鍵をかけようとして衝突する</div>
+
+  <p><strong>対策は2つあり、両方が正解の選択肢になりうる。</strong></p>
+  <ul class="plain">
+    <li><strong>直列モードにする</strong> — 同時に処理しないので衝突しない。確実だが遅い。</li>
+    <li><strong>子レコードを親IDでソートしてから入れる</strong> — 同じ親を持つ子が<strong>同じ束にまとまる</strong>ため、束どうしが別の親を触ることになり衝突しない。<strong>速さを保ったまま解決できるので、こちらのほうが上等な答え。</strong></li>
+  </ul>
+
+  <div class="pat"><span class="lab">試験での型</span>
+    <p>「大量ロードで <code>UNABLE_TO_LOCK_ROW</code> が出る。速度は維持したい」→ <strong>親IDでソート</strong><br>
+    「確実に通したい・多少遅くてよい」→ <strong>直列モード</strong></p></div>
+
+  <h3>その他</h3>
+  <div class="term key"><span class="t">PK Chunking</span>
+    <p>数千万件のような巨大なデータを<strong>取り出す</strong>ときの技法。PK＝Primary Key（レコードID）。巨大なテーブルに「全部ください」と頼むと時間切れになるので、<strong>IDの範囲で区切って「1〜10万番まで」「10万1〜20万番まで」と小分けに取り出す。</strong>Bulk API に指示するだけで自動的にやってくれる。</p>
+    <p><strong>試験での型</strong>：「数千万件のオブジェクトから抽出したいがタイムアウトする」→ PK Chunking。</p></div>
+  <div class="term"><span class="t">外部ID<span class="en">External ID</span></span>
+    <p>「他システムでの番号」を入れておく専用の項目。</p></div>
+  <div class="term key"><span class="t">Upsert</span>
+    <p>「あれば更新、なければ新規作成」という保存命令。<strong>外部IDを鍵にして upsert する</strong>のが、他システムとデータを同期する標準の型。Salesforce側のIDを相手に教えずに済むのが利点。<strong>連携の問題で最頻出。</strong></p></div>
+  <div class="term"><span class="t">ステージングデータベース<span class="en">staging database</span></span>
+    <p>Salesforceに入れる前に、データを一旦置いて加工・名寄せ・検証する外部の置き場。「汚いデータをそのまま入れない」ための場所。<strong>移行の問題で「どこで重複排除・変換をするか」と問われたらこれ。</strong></p></div>
+  <div class="term"><span class="t">ETL</span>
+    <p>Extract（抽出）・Transform（変換）・Load（投入）。データ移行や連携の処理の総称。専用ツール（Informatica、Talend、MuleSoft等）がある。</p></div>
+</section>
+
+<section id="ldv" data-t="大量データを抱えた組織">
+  <h2><span class="n">§ 8</span>大量データを抱えた組織</h2>
+  <div class="term"><span class="t">LDV<span class="en">Large Data Volume</span></span>
+    <p>大量データを抱えた組織。数百万件を超えると、普通に動いていたものが遅くなる。その対処が Data Architect の中心論点。</p></div>
+  <div class="term key"><span class="t">スキニーテーブル<span class="en">Skinny Table</span></span>
+    <p>よく使う項目だけを抜き出した<strong>内部的な軽量テーブル</strong>。Salesforceが裏側で作って自動的に使ってくれるので、作っても画面上は何も変わらず、ただ速くなる。<strong>自分では作れず、Salesforceのサポートに依頼する。</strong>この「依頼が必要」という点が選択肢の分かれ目になる。</p></div>
+  <div class="term"><span class="t">インデックス（索引）</span>
+    <p>検索を速くするための索引。本の巻末索引と同じ。標準で索引がある項目（ID、名前、外部ID、参照関係など）と、ない項目がある。</p></div>
+  <div class="term key"><span class="t">クエリの選択性<span class="en">Query Selectivity</span></span>
+    <p>検索条件が「どれだけ絞り込めているか」。<strong>絞り込めている条件は索引が使われて速い。絞り込めていない条件</strong>（全体の大部分が該当する条件、<code>!=</code> や <code>NOT</code>、<code>LIKE '%xxx'</code> のような前方不一致）<strong>は索引が使われず遅い。</strong></p>
+    <p><strong>試験での型</strong>：「クエリが遅い」→ 索引のある項目で絞る／選択性のない条件を外す。</p></div>
+  <div class="term key"><span class="t">Big Object</span>
+    <p><strong>数十億件規模を保存するための特殊なオブジェクト。</strong>読み書きが限定的（通常の検索・画面・レポートがほぼ使えない）な代わりに、際限なく溜められる。<strong>用途は履歴・ログ・監査記録のアーカイブ。</strong>「過去データを消したくないが現行データを軽くしたい」という問題の答え。</p></div>
+  <div class="term"><span class="t">データアーカイブ</span>
+    <p>古いデータを本体から外へ出す行為。出し先の選択肢＝Big Object ／ 外部ストレージ（§9の Salesforce Connect で読む）／ 外部のデータウェアハウス。</p></div>
+  <div class="term key"><span class="t">共有計算の延期<span class="en">Defer Sharing Calculation</span></span>
+    <p>大量データを入れる前に「誰が何を見られるかの再計算」を一時的に止めておき、作業後にまとめて計算させる設定。<strong>ロールや共有ルールを大量に変更するときに、これをしないと計算が延々と走って組織が重くなる。</strong></p></div>
+  <div class="term"><span class="t">データのロード順序</span>
+    <p>大量移行では<strong>親→子の順に入れる</strong>（親がいないと子を紐付けられない）。あわせて、ロード中は<strong>トリガー・入力規則・ワークフロー・共有計算を一時的に止める</strong>のが定石（止めないと1件ごとに余計な処理が走る）。</p></div>
+</section>
+
+<section id="integration" data-t="外部システムとの連携">
+  <h2><span class="n">§ 9</span>外部システムとの連携</h2>
+  <p class="lede">判断の分かれ目は「データをSalesforceにコピーするか、相手に置いたまま見るか」。これが連携の問題の主軸。</p>
+
+  <div class="term key"><span class="t">Salesforce Connect<span class="en">旧 Lightning Connect</span></span>
+    <p><strong>データをコピーせず、外部システムに置いたまま、Salesforceの画面で見る</strong>仕組み。見るたびに相手へ問い合わせる。</p>
+    <ul>
+      <li><strong>外部オブジェクト</strong> — その「外部に実体があるデータ」をSalesforce上で表す器。見た目は普通のオブジェクトだが、中身は相手のもの。<strong>検索・レポート・トリガーなど使えない機能がある。</strong></li>
+      <li><strong>OData</strong> — 外部オブジェクトが外部システムと話すときの標準的な通信規格。相手がこれに対応していればつなぐだけで済む。</li>
+      <li><strong>Apexコネクタフレームワーク</strong> — 相手が OData に対応していない場合に、<strong>つなぎ方を自分でコードで書く</strong>ための仕組み。</li>
+    </ul>
+    <p><strong>試験での型</strong>：「大量の履歴データがあるが、Salesforceのストレージを消費したくない／コピーを持ちたくない」→ Salesforce Connect ＋ 外部オブジェクト。</p></div>
+
+  <div class="term"><span class="t">マッシュアップ<span class="en">Mashup</span></span>
+    <p>外部システムの画面をそのままSalesforceの画面の中に埋め込んで見せる方式。<strong>データも画面も相手のまま。</strong>最も軽いが、Salesforce側では一切扱えない。</p></div>
+  <div class="term"><span class="t">Salesforce to Salesforce<span class="en">S2S</span></span>
+    <p><strong>Salesforce組織どうし</strong>でレコードを共有する専用機能。「取引先を別組織と共有したい」という問題で出る。</p></div>
+  <div class="term"><span class="t">変更データキャプチャ<span class="en">Change Data Capture / CDC</span></span>
+    <p>Salesforce側でデータが変わったときに、<strong>変更内容を外部へ通知</strong>する仕組み。外部が「変わったか？」と定期的に聞きに来る（ポーリング）のをやめさせられる。</p></div>
+  <div class="term"><span class="t">Platform Events</span>
+    <p>「出来事」を発信して、受け取った側が各自処理する連携方式。送り手と受け手を切り離せる。</p></div>
+  <div class="term"><span class="t">MDM<span class="en">Master Data Management</span></span>
+    <p>「どのシステムの値を正とするか」を決めて管理する考え方・仕組み。複数システムに同じ顧客がいるときの正本の決め方。<strong>システム・オブ・レコード（SOR）＝その項目の正本を持つシステム。</strong>設計の問題で「どちらを正とするか」を問われたらこの概念。</p></div>
+  <div class="term"><span class="t">データウェアハウス</span>
+    <p>分析のために複数システムのデータを集める置き場。Salesforceの外。</p></div>
+</section>
+
+<section id="skew" data-t="データモデルの落とし穴">
+  <h2><span class="n">§ 10</span>データモデルの落とし穴（スキュー）</h2>
+  <div class="term key"><span class="t">データスキュー<span class="en">Data Skew</span></span>
+    <p>データの<strong>偏り</strong>。1つのレコードに子が偏って集まると、§7で説明した<strong>ロックの取り合い</strong>が起きて性能が落ちる。<strong>目安は1万件。</strong></p></div>
+
+  <p>3種類あり、区別が問われる。</p>
+  <div class="term"><span class="t">所有権スキュー<span class="en">Ownership Skew</span></span>
+    <p><strong>1人のユーザーが1万件以上のレコードを所有</strong>している状態。よくある原因は「移行時に全部を管理者が所有した」「取りこぼし用のダミーユーザーに寄せた」。所有者の変更やロールの移動のたびに、共有の再計算が大量に走る。</p>
+    <p><strong>対策</strong>：所有者を分散させる。やむを得ない場合、そのユーザーを<strong>ロール階層に入れない</strong>（階層に入れると上位への再計算が連鎖する）。</p></div>
+  <div class="term"><span class="t">主従関係のスキュー<span class="en">Master-Detail Skew</span></span>
+    <p><strong>1つの親に子が1万件以上。</strong>子を保存するたびに親に鍵がかかるため、§7のロック競合が起きる。</p></div>
+  <div class="term"><span class="t">参照関係のスキュー<span class="en">Lookup Skew</span></span>
+    <p><strong>1つの参照先レコードを、大量のレコードが参照</strong>している状態。同じく保存時の競合を招く。</p>
+    <p><strong>対策</strong>：参照先を複数に分散させる（例：ダミーの「未割当」レコードを1つではなく複数用意して振り分ける）。</p></div>
+
+  <div class="term key"><span class="t">暗黙的な共有<span class="en">Implicit Sharing</span></span>
+    <p>Salesforceが自動的にかける共有。例：<strong>商談を見られる人は、その親の取引先も（読み取りだけ）見られる</strong>。設定していないのに見えてしまう／見えてしまわないのはこれが理由。<strong>消せない。</strong></p></div>
+  <div class="term key"><span class="t">個人取引先<span class="en">Person Accounts</span></span>
+    <p>「取引先（会社）」と「取引先責任者（人）」を1つにまとめた、個人顧客（B2C）向けの形。<strong>一度有効にすると戻せない。</strong>有効化すると件数や共有の扱いが変わるため、設計の問題で「B2Cを扱うには」と問われたらこれ。影響の大きさとあわせて覚える。</p></div>
+</section>
+
+<section id="security" data-t="セキュリティと共有">
+  <h2><span class="n">§ 11</span>セキュリティと共有</h2>
+
+  <h3>誰が何を見られるか（4層）</h3>
+  <ul class="plain">
+    <li><strong>オブジェクトレベル</strong> — 「商談というデータの種類そのものを触れるか」（プロファイル／権限セット）</li>
+    <li><strong>項目レベル</strong> — 「商談の中の『原価』という項目を見られるか」（項目レベルセキュリティ）</li>
+    <li><strong>レコードレベル</strong> — 「その商談のうち、どのレコードを見られるか」（組織の共有設定＋ロール階層＋共有ルール＋手動共有）</li>
+    <li><strong>画面・項目の出し方</strong> — ページレイアウトなど。<strong>これはセキュリティではない。</strong>隠しただけでAPIからは見える。<em>試験の引っかけ</em></li>
+  </ul>
+
+  <div class="term"><span class="t">プロファイル／権限セット</span>
+    <p>権限の束。<strong>現在の推奨は「プロファイルは最小にして、権限セットで足していく」</strong>（権限セットは複数重ねられるため、人ごとの例外に対応しやすい）。</p></div>
+  <div class="term"><span class="t">組織の共有設定<span class="en">OWD</span></span>
+    <p>「既定では他人のレコードを見られるか」の土台。非公開／参照のみ／参照・更新。<strong>土台を厳しくして、必要な人にだけ開けていく</strong>のが原則。</p></div>
+  <div class="term"><span class="t">ロール階層／共有ルール</span>
+    <p>ロール階層＝上司は部下のレコードを見られる、という縦の広げ方。共有ルール＝条件や所有者のグループを指定して横に広げる設定。</p></div>
+
+  <h3>コードの中でのセキュリティ</h3>
+  <div class="warn"><span class="lab">重要な前提</span>
+    <p><strong>Apexコードは既定で権限を無視する</strong>（システム権限で動く）。つまり「画面では見えない項目も、コードからは読めてしまう」。だから明示的に守る必要がある。これがPD1の出題ポイント。</p></div>
+
+  <div class="term"><span class="t">with sharing ／ without sharing ／ inherited sharing</span>
+    <p><code>with sharing</code>＝レコードの共有設定を<strong>守る</strong>。<code>without sharing</code>＝<strong>無視する</strong>（既定の挙動）。<code>inherited sharing</code>＝<strong>呼び出し元に従う</strong>。最も安全な既定として推奨される書き方。</p></div>
+  <div class="term key"><span class="t">WITH SECURITY_ENFORCED</span>
+    <p>検索命令（SOQL）に付けると、<strong>見る権限のない項目が含まれていたらエラーにする</strong>。全か無かの挙動。</p></div>
+  <div class="term key"><span class="t">Security.stripInaccessible()</span>
+    <p><strong>見る権限のない項目を、結果から黙って取り除く</strong>。エラーにせず処理を続けられるので、実務ではこちらが使いやすい。</p></div>
+  <div class="pat"><span class="lab">試験での型</span>
+    <p>「権限のない項目を除外して処理を続けたい」→ <strong>stripInaccessible</strong><br>
+    「権限がなければ止めたい」→ <strong>WITH SECURITY_ENFORCED</strong></p></div>
+
+  <h3>暗号化</h3>
+  <div class="term"><span class="t">Shield プラットフォーム暗号化</span>
+    <p>保存されているデータを暗号化する有償機能。<strong>暗号化すると、その項目は検索・並び替え・一部の機能で使えなくなる</strong>という代償がある。「暗号化すれば万事解決」という選択肢は不正解になりやすい。</p></div>
+  <div class="term"><span class="t">クラシック暗号化</span>
+    <p>古い方式。専用の項目型を使い、文字数制限がある。</p></div>
+</section>
+
+<section id="audit" data-t="監査・保持・分類">
+  <h2><span class="n">§ 12</span>監査・保持・分類</h2>
+  <div class="term"><span class="t">項目履歴管理<span class="en">Field History Tracking</span></span>
+    <p>「誰がいつ何をどう変えたか」を項目単位で記録する機能。<strong>保持期間は標準で18〜24か月。</strong>追跡できる項目数にも上限がある。</p></div>
+  <div class="term key"><span class="t">Field Audit Trail</span>
+    <p>上記を<strong>最長10年まで保持できる</strong>ようにする有償機能。「規制で長期保存が必要」という問題の答え。</p></div>
+  <div class="term"><span class="t">設定変更履歴<span class="en">Setup Audit Trail</span></span>
+    <p>設定を誰がいつ変えたかの記録。<strong>標準では6か月分。</strong></p></div>
+  <div class="term key"><span class="t">イベントモニタリング<span class="en">Event Monitoring</span></span>
+    <p>「誰がどのデータをダウンロードしたか」「誰がどのレポートを見たか」といった<strong>利用のログ</strong>を取る有償機能。<strong>データの中身の変更履歴ではなく、行動の記録。</strong>この区別が問われる。</p></div>
+  <div class="term"><span class="t">データ分類<span class="en">Data Classification</span></span>
+    <p>項目に「機密度」「個人情報か」などのラベルを付けておく機能。実際のアクセス制御はしない（<strong>ラベルを付けるだけ</strong>）。棚卸し・説明責任のための機能。</p></div>
+  <div class="term"><span class="t">同意管理<span class="en">Authorization Form Consent</span></span>
+    <p>「本人がどの利用に同意したか」を記録する標準の仕組み。GDPR等への対応で出る。</p></div>
+  <div class="term"><span class="t">Data Mask</span>
+    <p>サンドボックスにコピーされた本番データを、匿名化・置換する無償ツール。「開発者に本番の個人情報を見せたくない」問題の答え。</p></div>
+  <div class="term key"><span class="t">バックアップ</span>
+    <p>Salesforceの標準機能（週次エクスポート、レポート）では<strong>復元ができない</strong>（データは取れるが、関連を保ったまま戻す手段がない）点が重要。復元を含むなら Salesforce Backup か AppExchange の製品、または外部のバックアップ基盤が必要。</p></div>
+</section>
+
+<section id="legacy" data-t="古い用語（過去問の罠）">
+  <h2><span class="n">§ 13</span>過去問に残っている古い用語</h2>
+  <div class="warn"><span class="lab">注意</span>
+    <p>過去問は更新が遅れる。以下が出てきたら<strong>問題そのものが古い</strong>ので、選択肢の正誤を暗記しない。</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>過去問の表記</th><th>現在</th></tr></thead>
+    <tbody>
+      <tr><td class="old">ワークフロールール／プロセスビルダー</td><td><strong>レコードトリガーフロー</strong>に置き換わった（新規作成は不可）</td></tr>
+      <tr><td class="old">Data.com Clean</td><td><strong>提供終了。</strong>データ補完は外部サービスへ</td></tr>
+      <tr><td class="old">Wave Analytics / Einstein Analytics</td><td><strong>CRM Analytics</strong>（さらにブランド整理が進行中）</td></tr>
+      <tr><td class="old">Lightning Connect</td><td><strong>Salesforce Connect</strong> に改称</td></tr>
+      <tr><td class="old">Bulk API（1.0前提の記述）</td><td><strong>Bulk API 2.0</strong> が現行</td></tr>
+      <tr><td class="old">Sales Cloud Consultant</td><td><strong>Agentforce Sales Consultant</strong>（2026-07-24 改称）</td></tr>
+      <tr><td class="old">Service Cloud Consultant</td><td><strong>Agentforce Service Consultant</strong>（2026-07-24 改称）</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>試験の出題範囲自体がリリースサイクル（年3回）ごとに切り替わる。</strong>過去問の正誤は「どのサイクルの版か」に依存するので、仕様が揮発しやすい領域（機能の有無・上限値・推奨の既定）は一次情報で確認する。</p>
+</section>
+
+<section id="axis" data-t="迷ったときの判断軸">
+  <h2><span class="n">§ 14</span>迷ったときの判断軸</h2>
+  <p class="lede">問題文の前で手が止まったら、上から順に当てる。</p>
+  <div class="term key"><span class="t">1. 相席している建物で迷惑か？</span><p>（§0）迷惑な選択肢は不正解。</p></div>
+  <div class="term key"><span class="t">2. コードを書かずに済むか？</span><p>（§4）宣言的機能で足りるならそれが正解。</p></div>
+  <div class="term key"><span class="t">3. ループの中に読み書きがあるか？</span><p>（§2）あればその選択肢は不正解。</p></div>
+  <div class="term key"><span class="t">4. データをコピーするのか、相手に置いたままか？</span><p>（§9）連携の問題はここで二分される。</p></div>
+  <div class="term key"><span class="t">5. 1万件を超える偏りがないか？</span><p>（§10）性能の問題はほぼスキューかクエリの選択性。</p></div>
+  <div class="term key"><span class="t">6. 「速さ」と「確実さ」のどちらを問題文が求めているか？</span><p>（§7）同じ症状で答えが変わる。</p></div>
+</section>
+
+</main>
+
+<footer>
+  <p>読了の印はこの端末のブラウザにだけ保存される。別の端末では引き継がれない。</p>
+</footer>
+
+<script>
+(function(){
+  var KEY='sfgloss.read.v1';
+  var secs=[].slice.call(document.querySelectorAll('main > section'));
+  var read={};
+  try{ read=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ read={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(read)); }catch(e){} }
+
+  /* ---- TOC ---- */
+  var list=document.getElementById('tocList');
+  var links={};
+  secs.forEach(function(s){
+    var li=document.createElement('li');
+    var a=document.createElement('a');
+    a.href='#'+s.id; a.textContent=s.dataset.t;
+    li.appendChild(a); list.appendChild(li); links[s.id]=a;
+  });
+
+  /* ---- read toggles ---- */
+  secs.forEach(function(s){
+    var wrap=document.createElement('div'); wrap.className='mark';
+    var b=document.createElement('button'); b.type='button';
+    wrap.appendChild(b); s.appendChild(wrap);
+    function paint(){
+      var on=!!read[s.id];
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.textContent=on?'✓ 読んだ':'読んだ';
+      links[s.id].classList.toggle('done',on);
+    }
+    b.addEventListener('click',function(){
+      read[s.id]=!read[s.id]; if(!read[s.id]) delete read[s.id];
+      save(); paint();
+    });
+    paint();
+  });
+
+  /* ---- bars ---- */
+  var tocEl=document.getElementById('toc'), tocBtn=document.getElementById('tocBtn');
+  tocBtn.addEventListener('click',function(){
+    tocEl.open=!tocEl.open;
+    tocBtn.setAttribute('aria-pressed',tocEl.open?'true':'false');
+    if(tocEl.open) tocEl.scrollIntoView({block:'nearest'});
+  });
+  tocEl.addEventListener('toggle',function(){
+    tocBtn.setAttribute('aria-pressed',tocEl.open?'true':'false');
+  });
+
+  var findWrap=document.getElementById('findWrap'), findBtn=document.getElementById('findBtn');
+  var q=document.getElementById('q'), hits=document.getElementById('hits');
+  findBtn.addEventListener('click',function(){
+    findWrap.hidden=!findWrap.hidden;
+    findBtn.setAttribute('aria-pressed',findWrap.hidden?'false':'true');
+    if(!findWrap.hidden){ q.focus(); } else { q.value=''; filter(); }
+  });
+
+  var terms=[].slice.call(document.querySelectorAll('.term'));
+  function filter(){
+    var v=(q.value||'').trim().toLowerCase();
+    if(!v){
+      terms.forEach(function(t){ t.hidden=false; });
+      secs.forEach(function(s){ s.hidden=false; });
+      hits.textContent=''; return;
+    }
+    var n=0;
+    secs.forEach(function(s){
+      var any=false;
+      [].slice.call(s.querySelectorAll('.term')).forEach(function(t){
+        var m=t.textContent.toLowerCase().indexOf(v)>-1;
+        t.hidden=!m; if(m){ any=true; n++; }
+      });
+      s.hidden=!any;
+    });
+    hits.textContent = n ? ('該当する用語を表示中（'+ (v) +'）') : '該当なし。別の語で試す。';
+  }
+  q.addEventListener('input',filter);
+
+  /* ---- progress + current section ---- */
+  var now=document.getElementById('now'), prog=document.getElementById('prog');
+  var raf=0;
+  function tick(){
+    raf=0;
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    prog.style.width=(max>0?Math.min(100,Math.max(0,h.scrollTop/max*100)):0)+'%';
+    var cur=null, y=h.scrollTop+90;
+    secs.forEach(function(s){ if(!s.hidden && s.offsetTop<=y) cur=s; });
+    now.textContent=cur?cur.dataset.t:'はじめに';
+  }
+  addEventListener('scroll',function(){ if(!raf) raf=requestAnimationFrame(tick); },{passive:true});
+  tick();
+})();
+</script>
+</body>
+</html>
